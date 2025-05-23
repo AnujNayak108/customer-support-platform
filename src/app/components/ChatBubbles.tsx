@@ -13,7 +13,7 @@ type ChatBubblesProps = {
   messages: Message[];
 };
 
-export default function ChatBubbles({ contact, messages }: ChatBubblesProps) {
+export default function ChatBubbles({ messages }: ChatBubblesProps) {
   return (
     <div className="flex flex-col gap-3 sm:gap-4 mt-3 sm:mt-6 px-2 sm:px-8 max-w-full sm:max-w-2xl mx-auto w-full">
       {messages.map(message => (

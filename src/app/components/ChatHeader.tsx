@@ -1,4 +1,4 @@
-import { EllipsisHorizontalIcon, PhoneIcon } from '@heroicons/react/24/outline';
+import { EllipsisHorizontalIcon } from '@heroicons/react/24/outline';
 import { BsStar, BsTicket } from 'react-icons/bs';
 import { FiPhoneCall } from 'react-icons/fi';
 import { MdSnooze } from 'react-icons/md';

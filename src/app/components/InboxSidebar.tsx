@@ -1,6 +1,5 @@
 "use client";
 import { TbSquareToggle } from 'react-icons/tb';
-import { HiOutlineInbox } from 'react-icons/hi';
 import { FaUserCircle } from 'react-icons/fa';
 
 type Contact = {

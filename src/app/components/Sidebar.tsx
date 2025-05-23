@@ -3,8 +3,8 @@ import { ChatBubbleLeftRightIcon, UserGroupIcon, Cog6ToothIcon, InboxIcon } from
 export default function Sidebar() {
   return (
     <aside className="w-20 bg-white/80 backdrop-blur-sm border-r flex flex-col items-center py-4 space-y-2
-      fixed bottom-0 left-0 right-0 z-20 flex-row justify-between md:static md:flex-col md:w-20 md:h-full md:py-4 md:space-y-2 md:space-x-0
-      h-16 md:h-full shadow-lg md:shadow-none">
+      fixed bottom-0 left-0 right-0 z-20 justify-between md:static md:flex-col md:w-20 md:h-full md:py-4 md:space-y-2 md:space-x-0
+      h-16 shadow-lg md:shadow-none">
       <div className="flex flex-row md:flex-col items-center gap-4 flex-1 w-full justify-center md:justify-start">
         <button 
           aria-label="Inbox" 
