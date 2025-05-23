@@ -72,7 +72,7 @@ export default function Home() {
   };
 
   return (
-    <div className="flex flex-col md:flex-row min-h-screen w-full bg-gray-50 text-gray-900 overflow-hidden">
+    <div className="flex flex-col min-h-screen w-full bg-gray-50 text-gray-900 overflow-hidden">
       {/* Left Sidebar (Inbox) */}
       <InboxSidebar
         open={inboxOpen}
@@ -82,7 +82,11 @@ export default function Home() {
         onSelectContact={setSelectedContactId}
       />
       {/* Main Chat Area */}
-      <main className={`flex-1 flex flex-col min-h-0 transition-all duration-300 ${copilotOpen ? 'lg:mr-80' : ''} ${inboxOpen ? 'lg:ml-80' : ''}`}>
+      <main className={`flex-1 flex flex-col min-h-0 transition-all duration-300 ${
+        copilotOpen ? 'sm:mr-80' : ''
+      } ${inboxOpen ? 'sm:ml-80' : ''} ${
+        (inboxOpen || copilotOpen) ? 'hidden sm:flex' : 'flex'
+      }`}>
         <ChatHeader contact={selectedContact} />
         <section className="flex-1 flex flex-col overflow-hidden min-h-0">
           {/* Chat and Video Call Area */}

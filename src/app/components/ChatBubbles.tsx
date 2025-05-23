@@ -21,9 +21,12 @@ export default function ChatBubbles({ contact, messages }: ChatBubblesProps) {
           key={message.id}
           className={`${
             message.sender === 'user' 
-              ? 'self-start bg-blue-100 text-blue-900' 
-              : 'self-end bg-gray-100 text-gray-900'
-          } px-3 sm:px-4 py-2 rounded-lg shadow-sm max-w-[90vw] sm:max-w-[80%] text-sm sm:text-base`}
+              ? 'self-end bg-gradient-to-br from-blue-500 to-blue-600 text-white' 
+              : 'self-start bg-gradient-to-br from-gray-100 to-gray-200 text-gray-900'
+          } px-4 sm:px-5 py-2.5 rounded-2xl shadow-sm hover:shadow-md transition-shadow duration-200 max-w-[90vw] sm:max-w-[80%] text-sm sm:text-base`}
+          style={{
+            animation: 'fadeIn 0.3s ease-out',
+          }}
         >
           {message.text}
         </div>

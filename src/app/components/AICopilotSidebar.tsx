@@ -48,7 +48,9 @@ export default function AICopilotSidebar({ open, setOpen }: AICopilotSidebarProp
     <>
       {/* Sidebar Panel */}
       <aside
-        className={`hidden lg:flex fixed top-0 right-0 h-screen w-full lg:w-80 border-l bg-gradient-to-b from-white via-blue-50/10 to-purple-50/30 flex-col z-30 transition-transform duration-300 ${open ? 'translate-x-0' : 'translate-x-full'}`}
+        className={`fixed top-0 right-0 h-screen w-full sm:w-80 border-l bg-gradient-to-b from-white via-blue-50/10 to-purple-50/30 flex flex-col z-30 transition-transform duration-300 ${
+          open ? 'translate-x-0' : 'translate-x-full'
+        }`}
         style={{ boxShadow: open ? 'rgba(0,0,0,0.08) -4px 0 24px' : 'none' }}
       >
         <header className="flex flex-col border-b min-h-[68.5px] bg-white/80 backdrop-blur-sm">
@@ -56,13 +58,14 @@ export default function AICopilotSidebar({ open, setOpen }: AICopilotSidebarProp
             <div className="flex items-center gap-2">
               {/* Tabs */}
               <button
-                className={`flex items-center px-2 py-1 rounded-l-full text-xs font-semibold focus:outline-none ${activeTab === 'copilot' ? 'text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-purple-500' : 'text-gray-700'}`}
+                className={`flex items-center px-2 py-1 rounded-l-full text-md font-semibold focus:outline-none ${activeTab === 'copilot' ? 'text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-purple-500' : 'text-gray-700'}`}
                 onClick={() => setActiveTab('copilot')}
               >
-                <HiOutlineSparkles className={`mr-1 text-base ${activeTab === 'copilot' ? 'text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-purple-500' : 'text-gray-700'}`} />AI Copilot
+              <HiOutlineSparkles className={`mr-1 text-base flex flex-row ${activeTab === 'copilot' ? 'text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-purple-500' : 'text-gray-700'}`} />
+              AI Copilot
               </button>
               <button
-                className={`font-semibold px-2 py-1 text-xs focus:outline-none border-b-2 ${activeTab === 'details' ? 'text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-purple-500 border-blue-500' : 'border-transparent text-gray-700'}`}
+                className={`font-semibold px-2 py-1 text-md focus:outline-none border-b-2 ${activeTab === 'details' ? 'text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-purple-500 border-blue-500' : 'border-transparent text-gray-700'}`}
                 onClick={() => setActiveTab('details')}
               >
                 Details
@@ -164,32 +167,34 @@ export default function AICopilotSidebar({ open, setOpen }: AICopilotSidebarProp
             </div>
           )}
         </div>
-        {/* Message Box */}
-        <form onSubmit={handleSendMessage} className="px-4 py-3 flex items-center gap-2 bg-gradient-to-r from-blue-100/40 via-purple-100/40 to-pink-100/40 backdrop-blur-md border-t border-white/20 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)]">
-          <input
-            type="text"
-            value={message}
-            onChange={(e) => setMessage(e.target.value)}
-            placeholder="Type your message..."
-            className="flex-1 border border-white/20 rounded-md px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400/50 bg-white/30 backdrop-blur-sm"
-          />
-          <button
-            type="submit"
-            disabled={!message.trim()}
-            className={`bg-blue-500/90 backdrop-blur-sm text-white rounded-full px-4 py-2 text-sm font-semibold transition-colors ${
-              message.trim() ? 'hover:bg-blue-600/90' : 'opacity-50 cursor-not-allowed'
-            }`}
-          >
-            Send
-          </button>
-        </form>
+        {/* Message Box - Fixed to bottom */}
+        <div className="mt-auto border-t border-gray-100">
+          <form onSubmit={handleSendMessage} className="m-4 p-4 flex rounded-xl items-center gap-2 bg-gradient-to-r from-blue-100 via-purple-100 to-pink-100 backdrop-blur-md">
+            <input
+              type="text"
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
+              placeholder="Type your message..."
+              className="flex-1 border border-white/20 rounded-4xl px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400/50 bg-white/30 backdrop-blur-sm"
+            />
+            <button
+              type="submit"
+              disabled={!message.trim()}
+              className={`bg-blue-500/90 backdrop-blur-sm text-white rounded-full px-4 py-2 text-sm font-semibold transition-colors ${
+                message.trim() ? 'hover:bg-blue-600/90' : 'opacity-50 cursor-not-allowed'
+              }`}
+            >
+              Send
+            </button>
+          </form>
+        </div>
       </aside>
       {/* Show a small toggle button when sidebar is closed */}
       {!open && (
         <button
           aria-label="Show AI Copilot Panel"
           onClick={() => setOpen(true)}
-          className="hidden lg:flex fixed bottom-6 right-6 z-40 items-center gap-2 px-4 py-2 rounded-full shadow-lg bg-blue-100 text-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400"
+          className="fixed bottom-48 sm:bottom-6 right-6 z-40 flex items-center gap-2 px-4 py-2 rounded-full shadow-lg bg-blue-100 text-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400"
         >
           <span className="font-semibold text-xs">AI Copilot</span>
         </button>
