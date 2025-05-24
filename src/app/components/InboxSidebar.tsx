@@ -19,7 +19,6 @@ type InboxSidebarProps = {
 export default function InboxSidebar({ open, setOpen, contacts, selectedContactId, onSelectContact }: InboxSidebarProps) {
   return (
     <>
-      {/* Sidebar Panel */}
       <aside
         className={`fixed top-0 left-0 h-screen w-full sm:w-80 border-r bg-white flex-col z-30 transition-transform duration-300 ${
           open ? 'translate-x-0' : '-translate-x-full'
@@ -64,7 +63,7 @@ export default function InboxSidebar({ open, setOpen, contacts, selectedContactI
           </div>
         </div>
       </aside>
-      {/* Show a small toggle button when sidebar is closed */}
+      {/*toggle button when sidebar is closed */}
       {!open && (
         <button
           aria-label="Show Inbox Panel"

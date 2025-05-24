@@ -46,7 +46,6 @@ export default function AICopilotSidebar({ open, setOpen }: AICopilotSidebarProp
 
   return (
     <>
-      {/* Sidebar Panel */}
       <aside
         className={`fixed top-0 right-0 h-screen w-full sm:w-80 border-l bg-gradient-to-b from-white via-blue-50/10 to-purple-50/30 flex flex-col z-30 transition-transform duration-300 ${
           open ? 'translate-x-0' : 'translate-x-full'
@@ -85,7 +84,6 @@ export default function AICopilotSidebar({ open, setOpen }: AICopilotSidebarProp
         <div className="flex-1 overflow-y-auto px-4 py-4 space-y-4">
           {activeTab === 'details' && (
             <div className="space-y-4">
-              {/* Assignee & Team */}
               <div className="flex items-center justify-between text-xs text-gray-500 mb-2">
                 <span>Assignee</span>
                 <span className="flex items-center gap-1 text-gray-700 font-medium">
@@ -139,7 +137,6 @@ export default function AICopilotSidebar({ open, setOpen }: AICopilotSidebarProp
                         <HiOutlineChevronDown className="w-4 h-4" />
                       )}
                     </button>
-                    {/* Collapsible content placeholder */}
                     {collapse[section.key as keyof typeof collapse] && (
                       <div className="pl-4 pb-2 text-xs text-gray-500">No data available.</div>
                     )}
@@ -167,7 +164,7 @@ export default function AICopilotSidebar({ open, setOpen }: AICopilotSidebarProp
             </div>
           )}
         </div>
-        {/* Message Box - Fixed to bottom */}
+        {/* Message Box */}
         <div className="mt-auto border-t border-gray-100">
           <form onSubmit={handleSendMessage} className="m-4 p-4 flex rounded-xl items-center gap-2 bg-gradient-to-r from-blue-100 via-purple-100 to-pink-100 backdrop-blur-md">
             <input
@@ -189,7 +186,7 @@ export default function AICopilotSidebar({ open, setOpen }: AICopilotSidebarProp
           </form>
         </div>
       </aside>
-      {/* Show a small toggle button when sidebar is closed */}
+      {/*toggle button when sidebar is closed */}
       {!open && (
         <button
           aria-label="Show AI Copilot Panel"

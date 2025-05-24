@@ -59,7 +59,6 @@ export default function Home() {
     };
     setMessages(prev => [...prev, newMessage]);
 
-    // Simulate contact response after 1 second
     setTimeout(() => {
       const response: Message = {
         id: (Date.now() + 1).toString(),
@@ -89,7 +88,7 @@ export default function Home() {
       }`}>
         <ChatHeader contact={selectedContact} />
         <section className="flex-1 flex flex-col overflow-hidden min-h-0">
-          {/* Chat and Video Call Area */}
+          {/* Chat Area */}
           <section className="flex-1 flex flex-col bg-gray-50 min-h-0">
             <div className="flex-1 overflow-y-auto">
               <ChatBubbles contact={selectedContact} messages={messages} />
