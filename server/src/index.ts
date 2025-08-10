@@ -18,8 +18,6 @@ app.use(express.json());
 const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/intercom-clone';
 
 mongoose.connect(MONGODB_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
   serverSelectionTimeoutMS: 5000,
   socketTimeoutMS: 45000,
 })
