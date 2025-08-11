@@ -4,7 +4,7 @@ import { BsBookmark } from 'react-icons/bs';
 import { useState } from 'react';
 
 type MessageInputProps = {
-  onSendMessage: (message: string) => void;
+  onSendMessage: (message: string) => void | Promise<void>;
 };
 
 export default function MessageInput({ onSendMessage }: MessageInputProps) {

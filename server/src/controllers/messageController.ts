@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
-import Message, { IMessage } from '../models/Message';
+import Message from '../models/Message';
+import { getIo } from '../socket';
 
 export const createMessage = async (req: Request, res: Response) => {
   try {
@@ -10,6 +11,14 @@ export const createMessage = async (req: Request, res: Response) => {
       receiver
     });
     const savedMessage = await message.save();
+
+    // Emit to a deterministic room (conversation between two participants)
+    const roomA = `${sender}:${receiver}`;
+    const roomB = `${receiver}:${sender}`;
+    try {
+      getIo().to(roomA).to(roomB).emit('message:new', savedMessage);
+    } catch {}
+
     res.status(201).json(savedMessage);
   } catch (error) {
     res.status(500).json({ message: 'Error creating message', error });

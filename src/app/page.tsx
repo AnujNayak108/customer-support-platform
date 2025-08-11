@@ -8,6 +8,7 @@ import AICopilotSidebar from './components/AICopilotSidebar';
 import InboxSidebar from './components/InboxSidebar';
 import AuthModal from './components/AuthModal';
 import type { Contact } from './components/InboxSidebar';
+import { io, Socket } from 'socket.io-client';
 
 type Message = {
   id: string;
@@ -16,6 +17,16 @@ type Message = {
   timestamp: Date;
 };
 
+// Backend API message shape
+interface ApiMessage {
+  _id: string;
+  content: string;
+  sender: string;
+  receiver: string;
+  timestamp: string | Date;
+  isRead: boolean;
+}
+
 export default function Home() {
   const { isLoaded, isSignedIn } = useAuth();
   const { user } = useUser();
@@ -23,6 +34,7 @@ export default function Home() {
   const [inboxOpen, setInboxOpen] = useState(true);
   const [messages, setMessages] = useState<Message[]>([]);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
+  const [socket, setSocket] = useState<Socket | null>(null);
 
   const contacts: Contact[] = [
     {
@@ -55,24 +67,90 @@ export default function Home() {
   const [selectedContactId, setSelectedContactId] = useState(contacts[0].id);
   const selectedContact = contacts.find(c => c.id === selectedContactId) ?? contacts[0];
 
-  const handleSendMessage = (text: string) => {
-    const newMessage: Message = {
-      id: Date.now().toString(),
-      text,
-      sender: 'user',
-      timestamp: new Date(),
-    };
-    setMessages(prev => [...prev, newMessage]);
+  const currentUserId = user?.id ?? 'guest';
 
-    setTimeout(() => {
-      const response: Message = {
-        id: (Date.now() + 1).toString(),
-        text: `Thanks for your message! This is an automated response from ${selectedContact.name}.`,
-        sender: 'contact',
-        timestamp: new Date(),
-      };
-      setMessages(prev => [...prev, response]);
-    }, 1000);
+  const toUiMessage = (api: ApiMessage): Message => ({
+    id: api._id,
+    text: api.content,
+    sender: api.sender === currentUserId ? 'user' : 'contact',
+    timestamp: new Date(api.timestamp),
+  });
+
+  // Socket connection and room join per conversation
+  useEffect(() => {
+    if (!isSignedIn) return;
+
+    const s = io('https://customer-support-platform.onrender.com', { transports: ['websocket'] });
+    setSocket(s);
+
+    return () => {
+      s.disconnect();
+      setSocket(null);
+    };
+  }, [isSignedIn]);
+
+  useEffect(() => {
+    if (!socket) return;
+
+    const room = `${currentUserId}:${selectedContactId}`;
+    socket.emit('join', room);
+
+    const onNewMessage = (api: ApiMessage) => {
+      // Guard: only append if the message belongs to this conversation
+      const isForThisConversation =
+        (api.sender === currentUserId && api.receiver === selectedContactId) ||
+        (api.sender === selectedContactId && api.receiver === currentUserId);
+      if (!isForThisConversation) return;
+      setMessages(prev => {
+        if (prev.some(m => m.id === api._id)) return prev; // de-duplicate
+        return [...prev, toUiMessage(api)];
+      });
+    };
+
+    socket.on('message:new', onNewMessage);
+
+    return () => {
+      socket.off('message:new', onNewMessage);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [socket, currentUserId, selectedContactId]);
+
+  useEffect(() => {
+    if (!isSignedIn) return;
+
+    const controller = new AbortController();
+    const load = async () => {
+      try {
+        const params = new URLSearchParams({ sender: currentUserId, receiver: selectedContactId });
+        const res = await fetch(`/api/messages?${params.toString()}`, { signal: controller.signal });
+        if (!res.ok) throw new Error(`Failed to load messages: ${res.status}`);
+        const data: ApiMessage[] = await res.json();
+        setMessages(data.map(toUiMessage));
+      } catch (err) {
+        if ((err as any)?.name !== 'AbortError') {
+          console.error(err);
+        }
+      }
+    };
+
+    load();
+    return () => controller.abort();
+  }, [isSignedIn, currentUserId, selectedContactId]);
+
+  const handleSendMessage = async (text: string) => {
+    try {
+      const res = await fetch('/api/messages', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ content: text, sender: currentUserId, receiver: selectedContactId }),
+      });
+      if (!res.ok) throw new Error(`Failed to send message: ${res.status}`);
+      const saved: ApiMessage = await res.json();
+      // Optimistic update is optional; socket will also deliver it.
+      setMessages(prev => [...prev, toUiMessage(saved)]);
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   if (!isLoaded) {

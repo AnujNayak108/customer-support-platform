@@ -2,8 +2,10 @@ import express from 'express';
 import mongoose from 'mongoose';
 import cors from 'cors';
 import dotenv from 'dotenv';
+import http from 'http';
 import messageRoutes from './routes/messageRoutes';
 import authRoutes from './routes/authRoutes';
+import { initSocket } from './socket';
 
 // Load environment variables
 dotenv.config();
@@ -40,6 +42,10 @@ app.get('/', (req, res) => {
 
 // Start server
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
+const server = http.createServer(app);
+initSocket(server);
+server.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
-}); 
+});
+
+export default app; 
