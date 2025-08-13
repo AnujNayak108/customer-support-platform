@@ -3,11 +3,9 @@ import type { Contact } from './InboxSidebar';
 
 interface ChatHeaderProps {
   contact: Contact;
-  user: any;
-  onLogout: () => void;
 }
 
-export default function ChatHeader({ contact, user }: ChatHeaderProps) {
+export default function ChatHeader({ contact }: ChatHeaderProps) {
   return (
     <header className="bg-white border-b border-gray-200 px-4 py-3 flex items-center justify-between">
       <div className="flex items-center space-x-3">
@@ -26,4 +24,4 @@ export default function ChatHeader({ contact, user }: ChatHeaderProps) {
       </div>
     </header>
   );
-} 
+}

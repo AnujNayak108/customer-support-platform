@@ -27,6 +27,11 @@ interface ApiMessage {
   isRead: boolean;
 }
 
+// Type guard to check if an error is an AbortError
+function isAbortError(err: unknown): err is DOMException {
+  return (err as DOMException)?.name === 'AbortError';
+}
+
 export default function Home() {
   const { isLoaded, isSignedIn } = useAuth();
   const { user } = useUser();
@@ -69,6 +74,7 @@ export default function Home() {
 
   const currentUserId = user?.id ?? 'guest';
 
+  // Moved this function definition outside the component or memoize it if it changes
   const toUiMessage = (api: ApiMessage): Message => ({
     id: api._id,
     text: api.content,
@@ -127,7 +133,7 @@ export default function Home() {
         const data: ApiMessage[] = await res.json();
         setMessages(data.map(toUiMessage));
       } catch (err) {
-        if ((err as any)?.name !== 'AbortError') {
+        if (!isAbortError(err)) {
           console.error(err);
         }
       }
@@ -135,7 +141,7 @@ export default function Home() {
 
     load();
     return () => controller.abort();
-  }, [isSignedIn, currentUserId, selectedContactId]);
+  }, [isSignedIn, currentUserId, selectedContactId, toUiMessage]);
 
   const handleSendMessage = async (text: string) => {
     try {
@@ -223,8 +229,6 @@ export default function Home() {
         }`}>
           <ChatHeader 
             contact={selectedContact} 
-            user={user} 
-            onLogout={() => {}} // Clerk handles logout automatically
           />
           <section className="flex-1 flex flex-col overflow-hidden min-h-0">
             {/* Chat Area */}
